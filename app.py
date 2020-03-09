@@ -270,7 +270,7 @@ def create_venue_submission():
                   location_id=request.form['location'],
                   address=request.form['address'],
                   phone=request.form['phone'],
-                  #genres=request.form['genres'],
+                  image_link=request.form['image_link'],
                   facebook_link=request.form['facebook_link'])
     print(request.form.getlist('genres'))
 
@@ -478,7 +478,8 @@ def create_artist_submission():
       name=request.form['name'],
       phone=request.form['phone'],
       location=request.form['location'],
-      facebook_link= request.form['facebook_link'],
+      facebook_link=request.form['facebook_link'],
+      image_link=request.form['image_link']
     )
     genres = request.form.getlist('genres')
     add_genres = [Genre.query.get(genre) for genre in genres]
