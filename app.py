@@ -133,8 +133,6 @@ def venues():
     if location.venues:
       venues = []
       for v in location.venues:
-        print(v.name)
-
         new_venue = {
           "id": v.id,
           "name": v.name,
@@ -178,15 +176,10 @@ def show_venue(venue_id):
   past_shows = []
 
   for show in venue.shows: 
-    print(datetime.datetime.now())
     if show.start_time < datetime.datetime.now():
       past_shows.append(show)
     else:
       upcoming_shows.append(show)
-
-  print(past_shows)
-  print(upcoming_shows)
-
   data3={
     "id": 3,
     "name": "Park Square Live Music & Coffee",
@@ -247,7 +240,6 @@ def create_venue_submission():
                   phone=request.form['phone'],
                   image_link=request.form['image_link'],
                   facebook_link=request.form['facebook_link'])
-    print(request.form.getlist('genres'))
 
     genres = request.form.getlist('genres')
     add_genres = [Genre.query.get(genre) for genre in genres]
@@ -309,14 +301,10 @@ def show_artist(artist_id):
   past_shows = []
 
   for show in artist.shows: 
-    print(datetime.datetime.now())
     if show.start_time < datetime.datetime.now():
       past_shows.append(show)
     else:
       upcoming_shows.append(show)
-
-  print(past_shows)
-  print(upcoming_shows)
 
   data1={
     "id": 4,
