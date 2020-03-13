@@ -14,7 +14,7 @@
           <div class="form-group">
             {{ form.location(class_ = 'form-control', placeholder='city, state', autofocus = true) }}
           </div>
-          <a href="#" class="btn btn-primary">
+          <a href="{{url_for('create_location')}}" class="btn btn-primary" style='margin-left: 5px;'>
             Add City
           </a>
         </div>
@@ -27,6 +27,7 @@
         <label for="genres">Genres</label>
         <small>Ctrl+Click to select multiple</small>
         {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas', id=form.state, autofocus = true) }}
+        <a href="{{url_for('create_genre')}}" style='margin-top: 5px;' class="btn btn-primary ">Add Genre</a>
       </div>
       <div class="form-group">
           <label for="genres">Facebook Link</label>

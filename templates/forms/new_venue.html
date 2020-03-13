@@ -14,7 +14,7 @@
           <div class="form-group">
             {{ form.location(class_ = 'form-control', placeholder='city, state', autofocus = true) }}
           </div>
-          <a href="#" class="btn btn-primary">
+          <a href="{{url_for('create_location')}}" class="btn btn-primary" style="margin-left: 5px;">
             Add City
           </a>
         </div>
@@ -31,6 +31,7 @@
         <label for="genres">Genres</label>
         <small>Ctrl+Click to select multiple</small>
         {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas', id=form.state, autofocus = true) }}
+        <a href="{{url_for('create_genre')}}" class="btn btn-primary" style="margin-top: 5px;">Add Genre</a>
       </div>
       <div class="form-group">
           <label for="genres">Facebook Link</label>
@@ -40,6 +41,14 @@
           <label for="genres">Image Link</label>
           <small>Paste the image URL</small>
           {{ form.image_link(class_ = 'form-control', placeholder='http://', id=form.state, autofocus = true) }}
+        </div>
+        <div class="form-group">
+          {{ form.seeking_talent }}
+          <label for="genres"> Seeking Talent</label> 
+        </div>
+        <div class="form-group">
+          <label for="genres">Seeking Description</label> 
+          {{ form.seeking_description(class_ = 'form-control')}}
         </div>
       <input type="submit" value="Create Venue" class="btn btn-primary btn-lg btn-block">
     </form>
