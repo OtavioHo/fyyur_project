@@ -187,7 +187,7 @@ def create_venue_form():
 def create_venue_submission():
   try:
     seeking = False
-    if 'seeking_talent' in requet.form:
+    if 'seeking_talent' in request.form:
       seeking = True
 
     venue = Venue(name=request.form['name'],
