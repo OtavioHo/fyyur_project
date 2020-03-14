@@ -187,7 +187,7 @@ def create_venue_form():
 def create_venue_submission():
   try:
     seeking = False
-    if request.form['seeking_talent'] == 'y':
+    if 'seeking_talent' in requet.form:
       seeking = True
 
     venue = Venue(name=request.form['name'],
@@ -264,20 +264,18 @@ def show_artist(artist_id):
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
   form = ArtistForm()
-  artist={
-    "id": 4,
-    "name": "Guns N Petals",
-    "genres": ["Rock n Roll"],
-    "city": "San Francisco",
-    "state": "CA",
-    "phone": "326-123-5000",
-    "website": "https://www.gunsnpetalsband.com",
-    "facebook_link": "https://www.facebook.com/GunsNPetals",
-    "seeking_venue": True,
-    "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-    "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
-  }
-  # TODO: populate form with fields from artist with ID <artist_id>
+  artist = Artist.query.get(artist_id)
+  form.genres.choices = [(g.id, g.name) for g in Genre.query.all()]
+
+  form.location.choices = [(l.id, l.city + ', ' + l.state) for l in Location.query.all()]
+
+  form.name.data = artist.name
+  form.location.data = artist.location
+  form.genres.data = artist.genres
+  form.phone.data = artist.phone
+  form.facebook_link.data = artist.facebook_link
+  form.image_link.data = artist.image_link
+
   return render_template('forms/edit_artist.html', form=form, artist=artist)
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
@@ -285,32 +283,66 @@ def edit_artist_submission(artist_id):
   # TODO: take values from the form submitted, and update existing
   # artist record with ID <artist_id> using the new attributes
 
+  artist = Artist.query.get(artist_id)
+  artist.name = request.form['name']
+  artist.location = request.form['location']
+  artist.phone = request.form['phone']
+  artist.facebook_link = request.form['facebook_link']
+  artist.image_link = request.form['image_link']
+
+  genres = request.form.getlist('genres')
+  add_genres = [Genre.query.get(genre) for genre in genres]
+
+  artist.genres = add_genres
+
+  db.session.commit()
+
   return redirect(url_for('show_artist', artist_id=artist_id))
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
   form = VenueForm()
-  venue={
-    "id": 1,
-    "name": "The Musical Hop",
-    "genres": ["Jazz", "Reggae", "Swing", "Classical", "Folk"],
-    "address": "1015 Folsom Street",
-    "city": "San Francisco",
-    "state": "CA",
-    "phone": "123-123-1234",
-    "website": "https://www.themusicalhop.com",
-    "facebook_link": "https://www.facebook.com/TheMusicalHop",
-    "seeking_talent": True,
-    "seeking_description": "We are on the lookout for a local artist to play every two weeks. Please call us.",
-    "image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60"
-  }
-  # TODO: populate form with values from venue with ID <venue_id>
+
+  form.genres.choices = [(g.id, g.name) for g in Genre.query.all()]
+
+  form.location.choices = [(l.id, l.city + ', ' + l.state) for l in Location.query.all()]
+
+  venue = Venue.query.get(venue_id)
+  form.name.data = venue.name
+  form.address.data = venue.address
+  form.phone.data = venue.phone
+  form.facebook_link.data = venue.facebook_link
+  form.image_link.data = venue.image_link
+  form.seeking_description.data = venue.seeking_description
+
   return render_template('forms/edit_venue.html', form=form, venue=venue)
 
 @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
 def edit_venue_submission(venue_id):
-  # TODO: take values from the form submitted, and update existing
-  # venue record with ID <venue_id> using the new attributes
+  venue = Venue.query.get(venue_id)
+
+  venue.name = request.form['name']
+  venue.address = request.form['address']
+  venue.phone = request.form['phone']
+  venue.facebook_link = request.form['facebook_link']
+  venue.image_link = request.form['image_link']
+  venue.seeking_description = request.form['seeking_description']
+
+  genres = request.form.getlist('genres')
+  add_genres = [Genre.query.get(genre) for genre in genres]
+
+  venue.genres = add_genres
+
+  print(request.form)
+
+  seeking = False
+  if 'seeking_talent' in request.form:
+    seeking = True
+  
+  venue.seeking_talent = seeking
+
+  db.session.commit()
+
   return redirect(url_for('show_venue', venue_id=venue_id))
 
 #  Create Artist
